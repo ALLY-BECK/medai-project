@@ -105,9 +105,9 @@ def register_view(request):
         role=role,
         label=ROLE_LABELS.get(role, role),
     )
-    # Deactivate until email is verified
-    user.is_active = False
-    
+    # Activate immediately (no email verification required)
+    user.is_active = True
+
     if iin:
         user.iin = iin
     if phone:
@@ -127,24 +127,15 @@ def register_view(request):
             gender=''
         )
 
-    # Generate 6-digit code
-    code = f"{random.randint(100000, 999999)}"
-    EmailVerification.objects.create(user=user, code=code)
-
-    # Send verification email if email is provided
-    if email:
-        send_mail(
-            subject='Код подтверждения MedAI',
-            message=f'Здравствуйте, {name}!\n\nВаш код для завершения регистрации: {code}\nНикому не сообщайте этот код.\n\nС уважением,\nКоманда MedAI',
-            from_email='noreply@medai.kz',
-            recipient_list=[email],
-            fail_silently=True,
-        )
-
+    # Issue tokens immediately so user can login right away
+    refresh = RefreshToken.for_user(user)
     return Response({
-        'message': 'Код подтверждения отправлен на почту',
+        'message': 'Регистрация прошла успешно',
         'user_id': user.id,
-        'email': email
+        'email': email,
+        'access': str(refresh.access_token),
+        'refresh': str(refresh),
+        'user': UserSerializer(user).data,
     }, status=status.HTTP_201_CREATED)
 
 
