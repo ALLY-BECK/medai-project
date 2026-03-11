@@ -94,18 +94,37 @@ async function handleRegister(e) {
     btn.innerHTML = '<span>Регистрация...</span>';
     btn.disabled = true;
 
-    try {
-        const payload = { name, email, password, role };
-        if (role === 'patient') {
-            payload.iin = iin;
-            payload.phone = phone;
-        }
+    const payload = { name, email, password, role };
+    if (role === 'patient') {
+        payload.iin = iin;
+        payload.phone = phone;
+    }
 
+    btn.innerHTML = '<span>⏳ Подключение к серверу...</span>';
+
+    // Fetch with 45s timeout (Render free tier needs ~30s to wake up)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+    // Countdown message
+    let seconds = 0;
+    const countInterval = setInterval(() => {
+        seconds++;
+        if (seconds > 5) {
+            btn.innerHTML = `<span>⏳ Сервер просыпается... ${seconds}с</span>`;
+        }
+    }, 1000);
+
+    try {
         const res = await fetch(`${API_BASE}/auth/register/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload),
+            signal: controller.signal,
         });
+        clearTimeout(timeoutId);
+        clearInterval(countInterval);
+
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Ошибка регистрации');
 
@@ -128,6 +147,8 @@ async function handleRegister(e) {
         btn.innerHTML = '<span>Зарегистрироваться</span>';
         btn.disabled = false;
     } catch (err) {
+        clearTimeout(timeoutId);
+        clearInterval(countInterval);
         showToast(err.message || 'Ошибка регистрации', 'error');
         btn.innerHTML = '<span>Зарегистрироваться</span>';
         btn.disabled = false;
