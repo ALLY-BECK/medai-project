@@ -109,11 +109,19 @@ async function handleRegister(e) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Ошибка регистрации');
 
-        // Show verification modal
+        // If backend returns tokens directly — login immediately (no email verification)
+        if (data.access && data.user) {
+            saveTokens(data.access, data.refresh);
+            saveUser(data.user);
+            showToast(`✅ Добро пожаловать, ${data.user.name}!`);
+            loginAs(data.user.role, data.user);
+            return;
+        }
+
+        // Legacy: Show verification modal if no tokens in response
         tempUserId = data.user_id;
         const modal = document.getElementById('verify-email-modal');
         modal.style.display = 'flex';
-        // Make sure it stays on top
         document.body.appendChild(modal);
         showToast(`✅ Код отправлен на ${email}`);
 
