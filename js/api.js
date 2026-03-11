@@ -100,11 +100,12 @@ async function refreshAccessToken() {
 
 // ─── Auth API ──────────────────────────────────────────────────────────────
 
-async function apiLogin(email, password) {
+async function apiLogin(email, password, options = {}) {
     const res = await fetch(`${API_BASE}/auth/login/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
+        ...options,
     });
     if (!res.ok) {
         const err = await res.json().catch(() => ({}));

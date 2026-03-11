@@ -59,14 +59,34 @@ async function handleLogin(e) {
     const email = document.getElementById('auth-email').value.trim();
     const password = document.getElementById('auth-password').value;
     const btn = document.getElementById('login-btn');
-    btn.innerHTML = '<span>Вход...</span>';
+    btn.innerHTML = '<span>⏳ Подключение к серверу...</span>';
     btn.disabled = true;
+
+    // Fetch with 45s timeout (Render free tier needs ~30s to wake up)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+    // Countdown message
+    let seconds = 0;
+    const countInterval = setInterval(() => {
+        seconds++;
+        if (seconds > 5) {
+            btn.innerHTML = `<span>⏳ Сервер просыпается... ${seconds}с</span>`;
+        }
+    }, 1000);
+
     try {
-        const data = await apiLogin(email, password);
+        const data = await apiLogin(email, password, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        clearInterval(countInterval);
+
         saveTokens(data.access, data.refresh);
         saveUser(data.user);
         loginAs(data.user.role, data.user);
     } catch (err) {
+        clearTimeout(timeoutId);
+        clearInterval(countInterval);
+        
         showToast(err.message || 'Ошибка входа', 'error');
         btn.innerHTML = '<span>Войти в систему</span>';
         btn.disabled = false;
