@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MedAI — Медицинская Цифровая Экосистема</title>
+  <meta name="description"
+    content="MedAI — интеллектуальная медицинская цифровая экосистема для врачей, пациентов, аптек и лабораторий." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+  <!-- ═══════════════════════════════════════════════
+     AUTH PAGE
+═══════════════════════════════════════════════ -->
+  <div id="page-auth" class="page active">
+    <div class="auth-bg">
+      <div class="auth-orb auth-orb-1"></div>
+      <div class="auth-orb auth-orb-2"></div>
+      <div class="auth-orb auth-orb-3"></div>
+    </div>
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="10" fill="url(#logoGrad)" />
+            <path d="M18 8v20M8 18h20" stroke="white" stroke-width="3" stroke-linecap="round" />
+            <circle cx="18" cy="18" r="6" stroke="white" stroke-width="2" fill="none" opacity="0.5" />
+            <defs>
+              <linearGradient id="logoGrad" x1="0" y1="0" x2="36" y2="36">
+                <stop offset="0%" stop-color="#2563EB" />
+                <stop offset="100%" stop-color="#06B6D4" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div>
+          <h1 class="auth-logo-title">MedAI</h1>
+          <p class="auth-logo-sub">Медицинская Цифровая Экосистема</p>
+        </div>
+      </div>
+
+      <div class="auth-card glass-card">
+        <!-- Tabs -->
+        <div class="auth-tabs" id="auth-tabs">
+          <button class="auth-tab active" id="tab-login" onclick="switchAuthTab('login')">Войти</button>
+          <button class="auth-tab" id="tab-register" onclick="switchAuthTab('register')">Регистрация</button>
+        </div>
+
+        <!-- LOGIN PANEL -->
+        <div id="panel-login">
+          <h2 class="auth-card-title">Добро пожаловать</h2>
+          <p class="auth-card-desc">Выберите вашу роль для входа в систему</p>
+
+          <div class="role-grid" id="role-grid">
+            <button class="role-card" data-role="doctor" onclick="selectRole('doctor')">
+              <div class="role-icon">🩺</div>
+              <span class="role-label">Врач</span>
+            </button>
+            <button class="role-card" data-role="admin" onclick="selectRole('admin')">
+              <div class="role-icon">🏥</div>
+              <span class="role-label">Мед персонал</span>
+            </button>
+            <button class="role-card" data-role="pharmacy" onclick="selectRole('pharmacy')">
+              <div class="role-icon">💊</div>
+              <span class="role-label">Аптекарь</span>
+            </button>
+            <button class="role-card" data-role="lab" onclick="selectRole('lab')">
+              <div class="role-icon">🔬</div>
+              <span class="role-label">Лаборатория</span>
+            </button>
+            <button class="role-card" data-role="ministry" onclick="selectRole('ministry')">
+              <div class="role-icon">🏛️</div>
+              <span class="role-label">Минздрав</span>
+            </button>
+            <button class="role-card" data-role="patient" onclick="selectRole('patient')">
+              <div class="role-icon">👤</div>
+              <span class="role-label">Пациент</span>
+            </button>
+          </div>
+
+          <form class="auth-form" id="auth-form" onsubmit="handleLogin(event)">
+            <div class="selected-role-badge" id="selected-role-badge" style="display:none"></div>
+            <div class="form-group">
+              <label class="form-label">Email или ИИН</label>
+              <input type="text" class="form-input" id="auth-email" placeholder="example@medai.kz" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Пароль</label>
+              <input type="password" class="form-input" id="auth-password" placeholder="••••••••" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="login-btn" disabled>
+              <span>Войти в систему</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- REGISTER PANEL -->
+        <div id="panel-register" style="display:none">
+          <h2 class="auth-card-title">Создать аккаунт</h2>
+          <p class="auth-card-desc">Зарегистрируйтесь в системе MedAI</p>
+
+          <form class="auth-form" id="register-form" onsubmit="handleRegister(event)">
+            <div class="form-group">
+              <label class="form-label">Полное имя</label>
+              <input type="text" class="form-input" id="reg-name" placeholder="Асель Нурланова" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Роль</label>
+              <select class="form-input" id="reg-role">
+                <option value="doctor">🩺 Врач</option>
+                <option value="admin">🏥 Мед персонал</option>
+                <option value="pharmacy">💊 Аптекарь</option>
+                <option value="lab">🔬 Лаборатория</option>
+                <option value="ministry">🏛️ Минздрав</option>
+                <option value="patient">👤 Пациент</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email (для получения кода)</label>
+              <input type="email" class="form-input" id="reg-email" placeholder="example@mail.com" required />
+            </div>
+            <div class="form-group" id="reg-patient-fields" style="display:none;">
+              <label class="form-label">ИИН</label>
+              <input type="text" class="form-input" id="reg-iin" placeholder="123456789012" maxlength="12" />
+              <label class="form-label" style="margin-top: 10px;">Телефон</label>
+              <input type="text" class="form-input" id="reg-phone" placeholder="+7 777 123 4567" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Пароль</label>
+              <input type="password" class="form-input" id="reg-password" placeholder="Минимум 6 символов" required />
+            </div>
+            <button type="submit" class="btn btn-primary btn-full" id="register-btn">
+              <span>Зарегистрироваться</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <p class="auth-footer">MedAI © 2026 · Защищено шифрованием</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+     APP SHELL (Sidebar + Content)
+═══════════════════════════════════════════════ -->
+  <div id="app-shell" class="app-shell" style="display:none">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none">
+            <rect width="36" height="36" rx="10" fill="url(#sideLogoGrad)" />
+            <path d="M18 8v20M8 18h20" stroke="white" stroke-width="3" stroke-linecap="round" />
+            <circle cx="18" cy="18" r="6" stroke="white" stroke-width="2" fill="none" opacity="0.5" />
+            <defs>
+              <linearGradient id="sideLogoGrad" x1="0" y1="0" x2="36" y2="36">
+                <stop offset="0%" stop-color="#2563EB" />
+                <stop offset="100%" stop-color="#06B6D4" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <span class="sidebar-logo-text">MedAI</span>
+      </div>
+
+      <div class="sidebar-user" id="sidebar-user">
+        <div class="sidebar-avatar" id="sidebar-avatar">ДВ</div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name" id="sidebar-user-name">Доктор Врач</div>
+          <div class="sidebar-user-role" id="sidebar-user-role">Врач</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Populated by JS based on role -->
+      </nav>
+
+      <button class="sidebar-logout" onclick="handleLogout()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
+        </svg>
+        Выйти
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+
+      <!-- ── DOCTOR DASHBOARD ── -->
+      <section id="page-dashboard" class="content-page">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Дашборд</h1>
+            <p class="page-subtitle" id="dashboard-greeting">Добрый день, доктор!</p>
+          </div>
+          <div class="header-date" id="header-date"></div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-blue">📋</div>
+            <div class="stat-info">
+              <div class="stat-value">8</div>
+              <div class="stat-label">Приёмов сегодня</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-green">✅</div>
+            <div class="stat-info">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Завершено</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-amber">⏳</div>
+            <div class="stat-info">
+              <div class="stat-value">5</div>
+              <div class="stat-label">Ожидают</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-cyan">💬</div>
+            <div class="stat-info">
+              <div class="stat-value">2</div>
+              <div class="stat-label">Новых сообщений</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="glass-card appointments-card">
+            <div class="card-header">
+              <h2 class="card-title">Сегодняшние приёмы</h2>
+              <span class="badge badge-blue">18 февраля 2026</span>
+            </div>
+            <div id="calendar-widget" style="margin-bottom: 20px; text-align: center;"></div>
+            <div class="appointments-list" id="appointments-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+
+          <div class="glass-card notifications-card">
+            <div class="card-header">
+              <h2 class="card-title">Уведомления</h2>
+              <span class="notif-dot"></span>
+            </div>
+            <div class="notifications-list" id="notifications-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PATIENTS PAGE ── -->
+      <section id="page-patients" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Пациенты</h1>
+            <p class="page-subtitle">Поиск и медицинские карты</p>
+          </div>
+        </div>
+
+        <div class="search-bar-wrap glass-card">
+          <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
+          <input type="text" class="search-input" id="patient-search" placeholder="Поиск по ИИН или имени пациента..."
+            oninput="searchPatients(this.value)" />
+          <span class="search-count" id="search-count">24 пациента</span>
+        </div>
+
+        <div class="patients-grid" id="patients-grid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Patient Medical Record Panel -->
+        <div class="record-overlay" id="record-overlay" onclick="closeRecord(event)">
+          <div class="record-panel glass-card" id="record-panel">
+            <button class="record-close" onclick="closeRecord()">✕</button>
+            <div id="record-content"><!-- Populated by JS --></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── APPOINTMENT PAGE ── -->
+      <section id="page-appointment" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Приём пациента</h1>
+            <p class="page-subtitle" id="appt-patient-name">Выберите пациента</p>
+          </div>
+          <div class="appt-status-badge" id="appt-status-badge">
+            <span class="status-dot"></span>
+            <span id="appt-status-text">Ожидание</span>
+          </div>
+        </div>
+
+        <div class="appt-start-wrap" id="appt-start-wrap">
+          <div class="glass-card appt-start-card">
+            <div class="appt-start-icon">🩺</div>
+            <h2>Начать приём</h2>
+            <p>Нажмите кнопку, чтобы начать запись диалога с пациентом. ИИ будет анализировать разговор в реальном
+              времени.</p>
+            <button class="btn btn-primary btn-lg" onclick="startAppointment()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M10 8l6 4-6 4V8z" fill="white" />
+              </svg>
+              Начать приём
+            </button>
+          </div>
+        </div>
+
+        <div class="appt-session" id="appt-session" style="display:none">
+          <div class="appt-split">
+            <!-- Left: Dialog -->
+            <div class="glass-card appt-dialog-card">
+              <div class="dialog-header">
+                <div class="mic-indicator" id="mic-indicator">
+                  <span class="mic-dot"></span>
+                  <span>Запись идёт</span>
+                </div>
+                <span class="dialog-timer" id="dialog-timer">00:00</span>
+              </div>
+              <div class="dialog-transcript" id="dialog-transcript">
+                <!-- Populated by JS -->
+              </div>
+            </div>
+
+            <!-- Right: AI Analysis -->
+            <div class="appt-ai-panel">
+              <div class="glass-card ai-card">
+                <div class="ai-header">
+                  <div class="ai-badge">
+                    <span>🤖</span>
+                    <span>ИИ Анализ</span>
+                    <div class="ai-pulse"></div>
+                  </div>
+                </div>
+
+                <div class="ai-section">
+                  <h3 class="ai-section-title">Симптомы</h3>
+                  <div class="ai-symptoms" id="ai-symptoms">
+                    <div class="ai-loading">Анализирую...</div>
+                  </div>
+                </div>
+
+                <div class="ai-section">
+                  <h3 class="ai-section-title">Предварительный диагноз</h3>
+                  <div class="ai-diagnosis" id="ai-diagnosis">
+                    <div class="ai-loading">Ожидаю данных...</div>
+                  </div>
+                </div>
+
+                <div class="ai-section">
+                  <h3 class="ai-section-title">Рекомендации</h3>
+                  <div class="ai-recommendations" id="ai-recommendations">
+                    <div class="ai-loading">Ожидаю данных...</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass-card conclusion-card">
+                <h3 class="card-title">Заключение врача</h3>
+                <textarea class="conclusion-textarea" id="conclusion-text"
+                  placeholder="Заключение будет предложено ИИ. Вы можете редактировать..."></textarea>
+
+                <div id="extended-conclusion-fields"
+                  style="display:none; margin-top:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
+                  <div class="form-group">
+                    <label class="form-label">Состояние после лечения (необязательно)</label>
+                    <input type="text" class="form-input" id="post-treatment-status"
+                      placeholder="Например: улучшение, без изменений" />
+                  </div>
+                  <div class="form-group" style="margin-top:10px;">
+                    <label class="form-label">Назначить повторный приём (дата)</label>
+                    <input type="date" class="form-input" id="follow-up-date" />
+                  </div>
+                </div>
+
+                <button class="btn btn-primary btn-full" id="send-conclusion-btn" onclick="sendConclusion()"
+                  style="display:none; margin-top:15px;">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
+                  </svg>
+                  Подтвердить и отправить пациенту
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PHARMACY PAGE ── -->
+      <section id="page-pharmacy" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Аптека</h1>
+            <p class="page-subtitle">Сканирование QR-рецептов</p>
+          </div>
+        </div>
+
+        <div class="pharmacy-grid">
+          <div class="glass-card qr-scanner-card">
+            <h2 class="card-title">Сканер рецептов</h2>
+            <div class="qr-scanner-area" id="qr-scanner-area">
+              <div class="qr-frame">
+                <div class="qr-corner qr-tl"></div>
+                <div class="qr-corner qr-tr"></div>
+                <div class="qr-corner qr-bl"></div>
+                <div class="qr-corner qr-br"></div>
+                <div class="qr-scan-line"></div>
+                <div class="qr-placeholder">
+                  <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
+                    opacity="0.4">
+                    <rect x="3" y="3" width="7" height="7" />
+                    <rect x="14" y="3" width="7" height="7" />
+                    <rect x="3" y="14" width="7" height="7" />
+                    <path d="M14 14h1v1h-1zM16 14h1v1h-1zM14 16h1v1h-1zM16 16h3v3h-3z" />
+                  </svg>
+                  <p>Наведите камеру на QR-код рецепта</p>
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-full" onclick="simulateScan()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9V5a2 2 0 012-2h4M15 3h4a2 2 0 012 2v4M21 15v4a2 2 0 01-2 2h-4M9 21H5a2 2 0 01-2-2v-4" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+              </svg>
+              Сканировать QR-код
+            </button>
+          </div>
+
+          <div class="glass-card prescription-result" id="prescription-result" style="display:none">
+            <div class="prescription-header">
+              <div class="prescription-verified">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+                  <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                Рецепт верифицирован
+              </div>
+              <span class="badge badge-green">Действителен</span>
+            </div>
+            <div id="prescription-details"></div>
+            <button class="btn btn-primary btn-full" onclick="dispenseRx()">Выдать лекарства</button>
+          </div>
+
+          <div class="glass-card recent-prescriptions-card">
+            <h2 class="card-title">Последние рецепты</h2>
+            <div id="recent-prescriptions"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── LABORATORY PAGE ── -->
+      <section id="page-lab" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Лаборатория</h1>
+            <p class="page-subtitle">Управление анализами</p>
+          </div>
+          <button class="btn btn-primary" onclick="showAddResult()">+ Добавить результат</button>
+        </div>
+
+        <div class="lab-grid">
+          <div class="glass-card lab-pending-card">
+            <div class="card-header">
+              <h2 class="card-title">Ожидают результатов</h2>
+              <span class="badge badge-amber" id="pending-count">5</span>
+            </div>
+            <div id="lab-pending-list"></div>
+          </div>
+
+          <div class="glass-card lab-completed-card">
+            <div class="card-header">
+              <h2 class="card-title">Отправленные</h2>
+              <span class="badge badge-green">Сегодня</span>
+            </div>
+            <div id="lab-completed-list"></div>
+          </div>
+        </div>
+
+        <!-- Add Result Modal -->
+        <div class="modal-overlay" id="add-result-modal" style="display:none" onclick="closeModal(event)">
+          <div class="modal glass-card" onclick="event.stopPropagation()">
+            <h2 class="modal-title">Добавить результат анализа</h2>
+            <div class="form-group">
+              <label class="form-label">ИИН пациента</label>
+              <input type="text" class="form-input" id="lab-iin" placeholder="123456789012" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Тип анализа</label>
+              <select class="form-input" id="lab-type">
+                <option>Общий анализ крови</option>
+                <option>Биохимия крови</option>
+                <option>Общий анализ мочи</option>
+                <option>ПЦР тест</option>
+                <option>Гормоны щитовидной железы</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Результаты</label>
+              <textarea class="form-input" id="lab-results" rows="4"
+                placeholder="Введите результаты анализа..."></textarea>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-ghost" onclick="closeAddResult()">Отмена</button>
+              <button class="btn btn-primary" onclick="submitLabResult()">Отправить пациенту</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── MINISTRY PAGE ── -->
+      <section id="page-ministry" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Министерство здравоохранения</h1>
+            <p class="page-subtitle">Статистика и управление</p>
+          </div>
+          <div class="header-date" id="ministry-date"></div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-blue">🏥</div>
+            <div class="stat-info">
+              <div class="stat-value">247</div>
+              <div class="stat-label">Клиник</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-green">👨‍⚕️</div>
+            <div class="stat-info">
+              <div class="stat-value">4,832</div>
+              <div class="stat-label">Врачей</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-amber">📋</div>
+            <div class="stat-info">
+              <div class="stat-value">18,420</div>
+              <div class="stat-label">Приёмов за месяц</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-red">⚠️</div>
+            <div class="stat-info">
+              <div class="stat-value">12</div>
+              <div class="stat-label">Жалоб</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ministry-grid">
+          <div class="glass-card chart-card">
+            <div class="card-header">
+              <h2 class="card-title">Приёмы по клиникам</h2>
+              <select class="form-input form-input-sm" onchange="updateChart(this.value)">
+                <option>Февраль 2026</option>
+                <option>Январь 2026</option>
+                <option>Декабрь 2025</option>
+              </select>
+            </div>
+            <canvas id="clinics-chart" height="200"></canvas>
+          </div>
+
+          <div class="glass-card complaints-card">
+            <div class="card-header">
+              <h2 class="card-title">Жалобы</h2>
+              <span class="badge badge-red">12 новых</span>
+            </div>
+            <div id="complaints-list"></div>
+          </div>
+        </div>
+
+        <div class="glass-card regions-card">
+          <div class="card-header">
+            <h2 class="card-title">Загруженность по регионам</h2>
+          </div>
+          <div class="regions-grid" id="regions-grid"></div>
+        </div>
+
+        <!-- ── NEW PUBLISH ANNOUNCEMENT ── -->
+        <div class="glass-card publish-card" style="margin-top: 20px;">
+          <div class="card-header">
+            <h2 class="card-title">Опубликовать приказ / уведомление</h2>
+          </div>
+          <div class="form-group" style="margin-top: 15px;">
+            <textarea class="form-input" id="ministry-announcement-text" rows="3"
+              placeholder="Текст официального уведомления для всех клиник..."></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="publishMinistryAnnouncement()">Опубликовать для всех медицинских
+            учреждений</button>
+        </div>
+
+      </section>
+
+      <!-- ── ADMIN PAGE ── -->
+      <section id="page-admin" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Администрация</h1>
+            <p class="page-subtitle">Управление клиникой</p>
+          </div>
+        </div>
+
+        <div class="stats-row">
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-blue">👥</div>
+            <div class="stat-info">
+              <div class="stat-value">42</div>
+              <div class="stat-label">Сотрудников</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-green">📅</div>
+            <div class="stat-info">
+              <div class="stat-value">156</div>
+              <div class="stat-label">Записей на неделю</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-amber">🛏️</div>
+            <div class="stat-info">
+              <div class="stat-value">28</div>
+              <div class="stat-label">Свободных коек</div>
+            </div>
+          </div>
+          <div class="stat-card glass-card">
+            <div class="stat-icon stat-icon-cyan">📢</div>
+            <div class="stat-info">
+              <div class="stat-value">3</div>
+              <div class="stat-label">Объявлений</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          <div class="glass-card schedule-card">
+            <div class="card-header">
+              <h2 class="card-title">Расписание врачей</h2>
+              <button class="btn btn-ghost btn-sm">Редактировать</button>
+            </div>
+            <div id="admin-schedule"></div>
+          </div>
+
+          <div class="glass-card announcements-card">
+            <div class="card-header">
+              <h2 class="card-title">Объявления клиники</h2>
+            </div>
+            <div class="announcement-form">
+              <textarea class="form-input" id="announcement-text" rows="3"
+                placeholder="Написать объявление для персонала..."></textarea>
+              <button class="btn btn-primary btn-full" onclick="publishAnnouncement()">Опубликовать</button>
+            </div>
+            <div id="announcements-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PATIENT DASHBOARD ── -->
+      <section id="page-patient-dashboard" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Главная</h1>
+            <p class="page-subtitle" id="patient-greeting">Добро пожаловать!</p>
+          </div>
+        </div>
+        <div class="patient-dashboard-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ── HOSPITALS ── -->
+      <section id="page-hospitals" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Больницы и Врачи</h1>
+            <p class="page-subtitle">Запись на прием к специалисту</p>
+          </div>
+        </div>
+        <div class="hospitals-grid" id="hospitals-grid">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ── DIAGNOSTICS & AI ── -->
+      <section id="page-diagnostics" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">AI-Диагностика</h1>
+            <p class="page-subtitle">Предварительный анализ симптомов</p>
+          </div>
+        </div>
+        <div class="diagnostics-container glass-card">
+          <div class="form-group">
+            <label class="form-label">Опишите ваши симптомы</label>
+            <textarea id="ai-symptoms-input" class="form-input" rows="4"
+              placeholder="Например: болит голова второй день, температура 38..."></textarea>
+          </div>
+          <button class="btn btn-primary" onclick="analyzeSymptoms()">Анализировать</button>
+          <div id="ai-diagnostics-results" style="margin-top: 20px;"></div>
+        </div>
+      </section>
+
+      <!-- ── HISTORY ── -->
+      <section id="page-history" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Медицинская история</h1>
+            <p class="page-subtitle">Ваши приемы, направления и анализы</p>
+          </div>
+        </div>
+        <div class="glass-card" style="margin-bottom: 20px;">
+          <h2 class="card-title">Календарь записей</h2>
+          <div id="patient-calendar-widget" style="text-align: center;"></div>
+        </div>
+        <div class="history-grid" id="history-grid">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- History Detail Modal -->
+        <div class="modal-overlay" id="history-detail-modal" style="display:none" onclick="closeModal(event)">
+          <div class="modal glass-card" onclick="event.stopPropagation()"
+            style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: start;">
+              <h2 class="modal-title" id="history-modal-title">Детали приема</h2>
+              <button class="btn btn-ghost btn-sm" onclick="window.print()"
+                style="display: flex; gap: 8px; align-items: center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2M6 14h12v8H6z" />
+                </svg>
+                Скачать PDF
+              </button>
+            </div>
+
+            <div id="history-modal-content" style="margin-top: 20px;">
+              <!-- Populated by JS -->
+            </div>
+
+            <div class="modal-actions" style="margin-top: 30px;">
+              <button class="btn btn-primary btn-full"
+                onclick="document.getElementById('history-detail-modal').style.display='none'">Закрыть</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── PATIENT PROFILE ── -->
+      <section id="page-patient-profile" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Мой профиль</h1>
+            <p class="page-subtitle">Личные данные и медицинская карта</p>
+          </div>
+        </div>
+        <div class="profile-container glass-card" id="patient-profile-content">
+          <!-- Populated by JS -->
+        </div>
+      </section>
+
+      <!-- ── MATERIALS PROFILE ── -->
+      <section id="page-materials" class="content-page" style="display:none">
+        <div class="page-header">
+          <div>
+            <h1 class="page-title">Медицинская база знаний</h1>
+            <p class="page-subtitle">Лекции и образовательные статьи</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-material" onclick="showAddMaterialModal()" style="display:none">+
+            Добавить материал</button>
+        </div>
+
+        <div class="materials-grid" id="materials-list">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Add Material Modal -->
+        <div class="modal-overlay" id="add-material-modal" style="display:none" onclick="closeModal(event)">
+          <div class="modal glass-card" onclick="event.stopPropagation()">
+            <h2 class="modal-title">Создать материал</h2>
+            <div class="form-group">
+              <label class="form-label">Тип</label>
+              <select class="form-input" id="mat-type">
+                <option value="article">Статья</option>
+                <option value="lecture">Лекция</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Заголовок</label>
+              <input type="text" class="form-input" id="mat-title" placeholder="Введите заголовок..." required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Текст материала</label>
+              <textarea class="form-input" id="mat-content" rows="6" placeholder="Содержимое..." required></textarea>
+            </div>
+            <div class="modal-actions">
+              <button class="btn btn-ghost"
+                onclick="document.getElementById('add-material-modal').style.display='none'">Отмена</button>
+              <button class="btn btn-primary" onclick="submitMaterial()">Опубликовать</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- View Material Modal -->
+        <div class="modal-overlay" id="view-material-modal" style="display:none" onclick="closeModal(event)">
+          <div class="modal glass-card" onclick="event.stopPropagation()"
+            style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+            <h2 class="modal-title" id="view-mat-title">Заголовок</h2>
+            <div style="color: var(--text-secondary); margin-bottom: 20px;" id="view-mat-meta">Автор</div>
+            <div style="line-height: 1.6; white-space: pre-wrap;" id="view-mat-content">Содержимое</div>
+            <div class="modal-actions" style="margin-top: 30px;">
+              <button class="btn btn-primary btn-full"
+                onclick="document.getElementById('view-material-modal').style.display='none'">Закрыть</button>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <!-- EMAIL VERIFICATION MODAL -->
+  <div class="modal-overlay" id="verify-email-modal" style="display:none; z-index: 9999;"
+    onclick="event.stopPropagation()">
+    <div class="modal glass-card" onclick="event.stopPropagation()">
+      <h2 class="modal-title">Подтверждение Email</h2>
+      <p class="auth-card-desc" style="margin-bottom:20px;">На вашу почту отправлен 6-значный код. Введите его ниже,
+        чтобы завершить регистрацию.</p>
+      <div class="form-group">
+        <label class="form-label">Код подтверждения</label>
+        <input type="text" class="form-input" id="verify-code" placeholder="123456" maxlength="6"
+          style="text-align:center; font-size:24px; letter-spacing:4px;" />
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost"
+          onclick="document.getElementById('verify-email-modal').style.display='none'">Отмена</button>
+        <button class="btn btn-primary" id="verify-btn" onclick="handleVerifyEmail()">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/patients.js"></script>
+  <script src="js/appointment.js"></script>
+  <script src="js/pharmacy.js"></script>
+  <script src="js/laboratory.js"></script>
+  <script src="js/ministry.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/patient_portal.js"></script>
+  <script src="js/materials.js"></script>
+
+</body>
+
+</html>

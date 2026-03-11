@@ -1,0 +1,328 @@
+/* MedAI Design System */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
+
+:root {
+  --bg-primary: #070C18;
+  --bg-secondary: #0D1526;
+  --glass-bg: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --blue: #2563EB;
+  --blue-light: #3B82F6;
+  --cyan: #06B6D4;
+  --green: #10B981;
+  --amber: #F59E0B;
+  --red: #EF4444;
+  --purple: #8B5CF6;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #475569;
+  --sidebar-width: 260px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.5);
+  --transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+
+/* Glass Card */
+.glass-card{background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:24px;transition:var(--transition)}
+.glass-card:hover{border-color:rgba(255,255,255,0.12)}
+
+/* Auth Page */
+#page-auth{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.auth-bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+.auth-orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:0.35;animation:orbFloat 8s ease-in-out infinite}
+.auth-orb-1{width:500px;height:500px;background:radial-gradient(circle,#2563EB,transparent);top:-150px;left:-100px}
+.auth-orb-2{width:400px;height:400px;background:radial-gradient(circle,#06B6D4,transparent);bottom:-100px;right:-80px;animation-delay:3s}
+.auth-orb-3{width:300px;height:300px;background:radial-gradient(circle,#8B5CF6,transparent);top:50%;left:50%;transform:translate(-50%,-50%);animation-delay:6s}
+@keyframes orbFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-30px) scale(1.05)}}
+.auth-container{position:relative;z-index:1;width:100%;max-width:520px;padding:24px;display:flex;flex-direction:column;align-items:center;gap:24px}
+.auth-logo{display:flex;align-items:center;gap:14px;animation:fadeInDown 0.6s ease}
+.auth-logo-icon{filter:drop-shadow(0 0 20px rgba(37,99,235,0.5))}
+.auth-logo-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:32px;font-weight:800;background:linear-gradient(135deg,#fff 0%,#94A3B8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.auth-logo-sub{font-size:12px;color:var(--text-secondary);letter-spacing:0.5px}
+.auth-card{width:100%;padding:32px;animation:fadeInUp 0.6s ease 0.1s both;box-shadow:var(--shadow-lg),0 0 30px rgba(37,99,235,0.2)}
+.auth-card-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px}
+.auth-card-desc{color:var(--text-secondary);font-size:14px;margin-bottom:24px}
+/* Auth Tabs */
+.auth-tabs{display:flex;gap:4px;padding:4px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-md);margin-bottom:24px}
+.auth-tab{flex:1;padding:10px;border-radius:calc(var(--radius-md) - 2px);font-size:14px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-secondary);transition:var(--transition);font-family:'Inter',sans-serif}
+.auth-tab.active{background:linear-gradient(135deg,var(--blue),#1D4ED8);color:white;box-shadow:0 4px 12px rgba(37,99,235,0.35)}
+.auth-tab:hover:not(.active){background:rgba(255,255,255,0.06);color:var(--text-primary)}
+
+.role-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:24px}
+.role-card{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-md);cursor:pointer;transition:var(--transition);color:var(--text-secondary)}
+.role-card:hover{background:rgba(37,99,235,0.15);border-color:rgba(37,99,235,0.4);color:var(--text-primary);transform:translateY(-2px)}
+.role-card.active{background:rgba(37,99,235,0.2);border-color:var(--blue);color:var(--text-primary);box-shadow:0 0 20px rgba(37,99,235,0.3)}
+.role-icon{font-size:24px}
+.role-label{font-size:10px;font-weight:500;text-align:center;line-height:1.3}
+.selected-role-badge{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(37,99,235,0.15);border:1px solid rgba(37,99,235,0.3);border-radius:var(--radius-sm);font-size:13px;color:var(--blue-light);margin-bottom:16px}
+.auth-form{display:flex;flex-direction:column;gap:16px}
+.auth-footer{font-size:12px;color:var(--text-muted);animation:fadeIn 0.6s ease 0.3s both}
+
+/* Forms */
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:13px;font-weight:500;color:var(--text-secondary)}
+.form-input{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text-primary);font-size:14px;font-family:'Inter',sans-serif;transition:var(--transition);outline:none;width:100%}
+.form-input:focus{border-color:var(--blue);background:rgba(37,99,235,0.08);box-shadow:0 0 0 3px rgba(37,99,235,0.15)}
+.form-input::placeholder{color:var(--text-muted)}
+.form-input option{background:var(--bg-secondary)}
+.form-input-sm{padding:8px 12px;font-size:13px;width:auto}
+textarea.form-input{resize:vertical;min-height:80px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 20px;border-radius:var(--radius-sm);font-size:14px;font-weight:600;font-family:'Inter',sans-serif;cursor:pointer;border:none;transition:var(--transition);text-decoration:none;white-space:nowrap}
+.btn:disabled{opacity:0.4;cursor:not-allowed}
+.btn-primary{background:linear-gradient(135deg,var(--blue) 0%,#1D4ED8 100%);color:white;box-shadow:0 4px 15px rgba(37,99,235,0.35)}
+.btn-primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,99,235,0.5);background:linear-gradient(135deg,var(--blue-light) 0%,var(--blue) 100%)}
+.btn-primary:active:not(:disabled){transform:translateY(0)}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.15);color:var(--text-secondary)}
+.btn-ghost:hover{background:rgba(255,255,255,0.06);color:var(--text-primary)}
+.btn-full{width:100%}
+.btn-sm{padding:8px 14px;font-size:13px}
+.btn-lg{padding:16px 32px;font-size:16px}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:0.3px}
+.badge-blue{background:rgba(37,99,235,0.2);color:#60A5FA;border:1px solid rgba(37,99,235,0.3)}
+.badge-green{background:rgba(16,185,129,0.2);color:#34D399;border:1px solid rgba(16,185,129,0.3)}
+.badge-amber{background:rgba(245,158,11,0.2);color:#FCD34D;border:1px solid rgba(245,158,11,0.3)}
+.badge-red{background:rgba(239,68,68,0.2);color:#FCA5A5;border:1px solid rgba(239,68,68,0.3)}
+.badge-cyan{background:rgba(6,182,212,0.2);color:#67E8F9;border:1px solid rgba(6,182,212,0.3)}
+
+/* App Shell */
+.app-shell{display:flex;min-height:100vh}
+.sidebar{width:var(--sidebar-width);background:rgba(7,12,24,0.95);border-right:1px solid var(--glass-border);display:flex;flex-direction:column;padding:20px 0;position:fixed;top:0;left:0;height:100vh;z-index:100;backdrop-filter:blur(20px)}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:0 20px 20px;border-bottom:1px solid var(--glass-border)}
+.sidebar-logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;background:linear-gradient(135deg,#fff 0%,#94A3B8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sidebar-user{display:flex;align-items:center;gap:12px;padding:16px 20px;margin:8px 12px;border-radius:var(--radius-md);background:rgba(255,255,255,0.04);border:1px solid var(--glass-border)}
+.sidebar-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;flex-shrink:0}
+.sidebar-user-name{font-size:13px;font-weight:600}
+.sidebar-user-role{font-size:11px;color:var(--text-secondary)}
+.sidebar-nav{flex:1;padding:12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--transition);color:var(--text-secondary);font-size:14px;font-weight:500;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:var(--text-primary)}
+.nav-item.active{background:rgba(37,99,235,0.15);color:#60A5FA;border:1px solid rgba(37,99,235,0.2)}
+.nav-icon{font-size:18px;width:22px;text-align:center}
+.sidebar-logout{display:flex;align-items:center;gap:10px;padding:12px 20px;margin:0 12px;border-radius:var(--radius-sm);background:none;border:1px solid rgba(239,68,68,0.2);color:rgba(239,68,68,0.7);font-size:14px;cursor:pointer;transition:var(--transition);font-family:'Inter',sans-serif}
+.sidebar-logout:hover{background:rgba(239,68,68,0.1);color:var(--red)}
+.main-content{margin-left:var(--sidebar-width);flex:1;padding:32px;min-height:100vh;background:radial-gradient(ellipse at top left,rgba(37,99,235,0.06) 0%,transparent 50%),radial-gradient(ellipse at bottom right,rgba(6,182,212,0.04) 0%,transparent 50%),var(--bg-primary)}
+.content-page{animation:fadeInUp 0.4s ease}
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:16px}
+.page-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:26px;font-weight:800;background:linear-gradient(135deg,#fff 0%,#94A3B8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.page-subtitle{font-size:14px;color:var(--text-secondary);margin-top:4px}
+.header-date{font-size:13px;color:var(--text-secondary);background:var(--glass-bg);border:1px solid var(--glass-border);padding:8px 14px;border-radius:var(--radius-sm)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.card-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.stat-card{display:flex;align-items:center;gap:16px;padding:20px}
+.stat-icon{width:48px;height:48px;border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.stat-icon-blue{background:rgba(37,99,235,0.15)}
+.stat-icon-green{background:rgba(16,185,129,0.15)}
+.stat-icon-amber{background:rgba(245,158,11,0.15)}
+.stat-icon-cyan{background:rgba(6,182,212,0.15)}
+.stat-icon-red{background:rgba(239,68,68,0.15)}
+.stat-value{font-size:24px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif}
+.stat-label{font-size:12px;color:var(--text-secondary);margin-top:2px}
+
+/* Dashboard */
+.dashboard-grid{display:grid;grid-template-columns:1fr 380px;gap:20px}
+.appointments-list{display:flex;flex-direction:column;gap:10px}
+.appointment-item{display:flex;align-items:center;gap:14px;padding:14px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);transition:var(--transition);cursor:pointer}
+.appointment-item:hover{background:rgba(37,99,235,0.08);border-color:rgba(37,99,235,0.2);transform:translateX(3px)}
+.appt-time{font-size:13px;font-weight:600;color:var(--cyan);min-width:50px}
+.appt-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--purple));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
+.appt-info{flex:1}
+.appt-name{font-size:14px;font-weight:600}
+.appt-diagnosis{font-size:12px;color:var(--text-secondary);margin-top:2px}
+.appt-actions{display:flex;gap:8px}
+.notifications-list{display:flex;flex-direction:column;gap:12px}
+.notif-item{display:flex;gap:12px;padding:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);transition:var(--transition)}
+.notif-item:hover{background:rgba(255,255,255,0.05)}
+.notif-icon{width:36px;height:36px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.notif-icon-ministry{background:rgba(37,99,235,0.15)}
+.notif-icon-clinic{background:rgba(16,185,129,0.15)}
+.notif-icon-alert{background:rgba(245,158,11,0.15)}
+.notif-body{flex:1}
+.notif-title{font-size:13px;font-weight:600}
+.notif-text{font-size:12px;color:var(--text-secondary);margin-top:3px;line-height:1.5}
+.notif-time{font-size:11px;color:var(--text-muted);margin-top:6px}
+.notif-dot{width:8px;height:8px;border-radius:50%;background:var(--red);box-shadow:0 0 8px var(--red);animation:pulse 2s infinite}
+
+/* Patients */
+.search-bar-wrap{display:flex;align-items:center;gap:12px;padding:14px 20px;margin-bottom:24px}
+.search-icon{color:var(--text-muted);flex-shrink:0}
+.search-input{flex:1;background:none;border:none;outline:none;color:var(--text-primary);font-size:15px;font-family:'Inter',sans-serif}
+.search-input::placeholder{color:var(--text-muted)}
+.search-count{font-size:13px;color:var(--text-secondary);white-space:nowrap}
+.patients-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.patient-card{padding:20px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-lg);cursor:pointer;transition:var(--transition);display:flex;align-items:center;gap:14px}
+.patient-card:hover{background:rgba(37,99,235,0.08);border-color:rgba(37,99,235,0.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(37,99,235,0.15)}
+.patient-avatar{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:white;flex-shrink:0}
+.patient-info{flex:1}
+.patient-name{font-size:15px;font-weight:600}
+.patient-iin{font-size:12px;color:var(--text-secondary);margin-top:2px;font-family:monospace}
+.patient-tags{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+
+/* Record Panel */
+.record-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:flex-end;animation:fadeIn 0.2s ease}
+.record-panel{width:520px;max-width:95vw;height:100vh;border-radius:var(--radius-lg) 0 0 var(--radius-lg);overflow-y:auto;position:relative;animation:slideInRight 0.3s ease;padding:32px}
+.record-close{position:absolute;top:20px;right:20px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:var(--transition)}
+.record-close:hover{background:rgba(239,68,68,0.2);color:var(--red)}
+.record-profile{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.record-avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:white}
+.record-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:700}
+.record-meta{font-size:13px;color:var(--text-secondary);margin-top:4px}
+.record-section{margin-bottom:24px}
+.record-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:12px}
+.record-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.record-info-item{padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06)}
+.record-info-label{font-size:11px;color:var(--text-muted);margin-bottom:4px}
+.record-info-value{font-size:14px;font-weight:500}
+.illness-timeline{display:flex;flex-direction:column;gap:10px}
+.illness-item{display:flex;gap:12px;align-items:flex-start}
+.illness-dot{width:10px;height:10px;border-radius:50%;background:var(--blue);margin-top:5px;flex-shrink:0;box-shadow:0 0 8px rgba(37,99,235,0.5)}
+.illness-name{font-size:14px;font-weight:500}
+.illness-date{font-size:12px;color:var(--text-secondary)}
+.allergy-list{display:flex;flex-wrap:wrap;gap:8px}
+.allergy-tag{padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500}
+.allergy-high{background:rgba(239,68,68,0.15);color:#FCA5A5;border:1px solid rgba(239,68,68,0.3)}
+.allergy-med{background:rgba(245,158,11,0.15);color:#FCD34D;border:1px solid rgba(245,158,11,0.3)}
+.allergy-low{background:rgba(16,185,129,0.15);color:#34D399;border:1px solid rgba(16,185,129,0.3)}
+
+/* Appointment */
+.appt-status-badge{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:20px;font-size:13px;font-weight:500}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}
+.status-dot.recording{background:var(--red);animation:pulse 1s infinite}
+.status-dot.done{background:var(--green)}
+.appt-start-wrap{display:flex;align-items:center;justify-content:center;min-height:400px}
+.appt-start-card{text-align:center;max-width:420px;padding:48px}
+.appt-start-icon{font-size:56px;margin-bottom:16px}
+.appt-start-card h2{font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:700;margin-bottom:12px}
+.appt-start-card p{color:var(--text-secondary);font-size:14px;line-height:1.6;margin-bottom:28px}
+.appt-split{display:grid;grid-template-columns:1fr 380px;gap:20px;align-items:start}
+.appt-dialog-card{height:calc(100vh - 200px);display:flex;flex-direction:column}
+.dialog-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--glass-border)}
+.mic-indicator{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--red)}
+.mic-dot{width:10px;height:10px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
+.dialog-timer{font-size:14px;font-weight:600;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.dialog-transcript{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+.dialog-message{display:flex;gap:10px;animation:fadeInUp 0.3s ease}
+.dialog-message.doctor{flex-direction:row-reverse}
+.dialog-speaker-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.dialog-message.patient .dialog-speaker-icon{background:rgba(6,182,212,0.2)}
+.dialog-message.doctor .dialog-speaker-icon{background:rgba(37,99,235,0.2)}
+.dialog-bubble{max-width:75%;padding:12px 14px;border-radius:var(--radius-md);font-size:14px;line-height:1.5}
+.dialog-message.patient .dialog-bubble{background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);border-top-left-radius:4px}
+.dialog-message.doctor .dialog-bubble{background:rgba(37,99,235,0.12);border:1px solid rgba(37,99,235,0.2);border-top-right-radius:4px}
+.dialog-speaker-name{font-size:11px;color:var(--text-muted);margin-bottom:4px}
+.appt-ai-panel{display:flex;flex-direction:column;gap:16px}
+.ai-header{margin-bottom:16px}
+.ai-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.3);border-radius:20px;font-size:13px;font-weight:600;color:#C4B5FD}
+.ai-pulse{width:8px;height:8px;border-radius:50%;background:var(--purple);animation:pulse 1.5s infinite}
+.ai-section{margin-bottom:16px}
+.ai-section-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);margin-bottom:8px}
+.ai-loading{font-size:13px;color:var(--text-muted);font-style:italic}
+.symptom-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;background:rgba(139,92,246,0.12);border:1px solid rgba(139,92,246,0.25);border-radius:20px;font-size:12px;color:#C4B5FD;margin:3px;animation:fadeIn 0.4s ease}
+.diagnosis-item{padding:10px 12px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.2);border-radius:var(--radius-sm);font-size:13px;margin-bottom:6px;animation:fadeInUp 0.3s ease}
+.diagnosis-confidence{font-size:11px;color:var(--blue-light);margin-top:4px}
+.conclusion-textarea{width:100%;min-height:120px;margin-bottom:12px}
+
+/* Pharmacy */
+.pharmacy-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.qr-scanner-card{grid-column:1}
+.recent-prescriptions-card{grid-column:2;grid-row:1/3}
+.prescription-result{grid-column:1}
+.qr-scanner-area{display:flex;align-items:center;justify-content:center;height:240px;background:rgba(0,0,0,0.3);border-radius:var(--radius-md);margin-bottom:16px;position:relative;overflow:hidden}
+.qr-frame{width:180px;height:180px;position:relative;display:flex;align-items:center;justify-content:center}
+.qr-corner{position:absolute;width:24px;height:24px;border-color:var(--cyan);border-style:solid}
+.qr-tl{top:0;left:0;border-width:3px 0 0 3px}
+.qr-tr{top:0;right:0;border-width:3px 3px 0 0}
+.qr-bl{bottom:0;left:0;border-width:0 0 3px 3px}
+.qr-br{bottom:0;right:0;border-width:0 3px 3px 0}
+.qr-scan-line{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);animation:scanLine 2s ease-in-out infinite;box-shadow:0 0 8px var(--cyan)}
+@keyframes scanLine{0%{top:0}100%{top:100%}}
+.qr-placeholder{text-align:center;color:var(--text-muted)}
+.qr-placeholder p{font-size:12px;margin-top:10px}
+.prescription-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.prescription-verified{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--green)}
+.rx-item{display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.rx-name{font-size:14px;font-weight:500}
+.rx-dose{font-size:12px;color:var(--text-secondary)}
+.recent-rx-item{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.recent-rx-icon{font-size:20px}
+.recent-rx-info{flex:1}
+.recent-rx-name{font-size:13px;font-weight:500}
+.recent-rx-time{font-size:11px;color:var(--text-muted)}
+
+/* Lab */
+.lab-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.lab-item{display:flex;align-items:center;gap:12px;padding:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);margin-bottom:10px;transition:var(--transition)}
+.lab-item:hover{background:rgba(255,255,255,0.05)}
+.lab-item-icon{width:40px;height:40px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.lab-item-info{flex:1}
+.lab-item-name{font-size:14px;font-weight:500}
+.lab-item-patient{font-size:12px;color:var(--text-secondary)}
+.lab-item-time{font-size:11px;color:var(--text-muted);margin-top:2px}
+
+/* Ministry */
+.ministry-grid{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-bottom:20px}
+.complaint-item{display:flex;align-items:flex-start;gap:12px;padding:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);margin-bottom:10px;transition:var(--transition)}
+.complaint-item:hover{background:rgba(255,255,255,0.05)}
+.complaint-info{flex:1}
+.complaint-title{font-size:14px;font-weight:500}
+.complaint-clinic{font-size:12px;color:var(--text-secondary)}
+.complaint-date{font-size:11px;color:var(--text-muted);margin-top:4px}
+.regions-card{margin-top:0}
+.regions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.region-item{padding:16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md)}
+.region-name{font-size:13px;font-weight:600;margin-bottom:8px}
+.region-bar-wrap{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.region-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.region-stats{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text-secondary)}
+
+/* Admin */
+.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.schedule-item{display:flex;align-items:center;gap:12px;padding:12px;background:rgba(255,255,255,0.03);border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.06);margin-bottom:8px}
+.schedule-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:white;flex-shrink:0}
+.schedule-info{flex:1}
+.schedule-name{font-size:13px;font-weight:600}
+.schedule-spec{font-size:12px;color:var(--text-secondary)}
+.schedule-time{font-size:12px;color:var(--cyan)}
+.announcement-form{margin-bottom:16px;display:flex;flex-direction:column;gap:10px}
+.announcement-item{padding:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius-md);margin-bottom:8px}
+.announcement-text{font-size:14px;line-height:1.5}
+.announcement-meta{font-size:11px;color:var(--text-muted);margin-top:8px}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:300;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.2s ease}
+.modal{width:480px;max-width:95vw;animation:fadeInUp 0.3s ease}
+.modal-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:18px;font-weight:700;margin-bottom:20px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;padding:14px 20px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);border-radius:var(--radius-md);color:#34D399;font-size:14px;font-weight:500;z-index:999;transform:translateY(100px);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);backdrop-filter:blur(20px);box-shadow:0 8px 24px rgba(0,0,0,0.3)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.error{background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#FCA5A5}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(0.85)}}
+.page{animation:fadeIn 0.3s ease}
+
+/* Responsive */
+@media(max-width:1100px){.dashboard-grid{grid-template-columns:1fr}.ministry-grid{grid-template-columns:1fr}.appt-split{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){:root{--sidebar-width:0px}.sidebar{display:none}.main-content{margin-left:0;padding:16px}.role-grid{grid-template-columns:repeat(3,1fr)}.pharmacy-grid{grid-template-columns:1fr}.lab-grid{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.role-grid{grid-template-columns:repeat(2,1fr)}.stats-row{grid-template-columns:1fr}}
