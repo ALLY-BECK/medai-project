@@ -3,7 +3,9 @@
 // Handles JWT tokens, fetch requests to backend
 // ═══════════════════════════════════════════════
 
-const API_BASE = 'http://127.0.0.1:8000/api';
+const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://127.0.0.1:8000/api'
+    : 'https://medai-project.onrender.com/api';
 
 // ─── Token Management ──────────────────────────────────────────────────────
 

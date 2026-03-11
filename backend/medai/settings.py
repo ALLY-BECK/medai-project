@@ -114,10 +114,13 @@ SIMPLE_JWT = {
 }
 
 # ─── CORS ──────────────────────────────────────────────────────────────────
-CORS_ALLOW_ALL_ORIGINS = True  # For development only
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://ally-beck.github.io",
+    "https://medai-project.onrender.com",
     "null",
 ]
 
