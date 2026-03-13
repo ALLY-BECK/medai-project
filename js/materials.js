@@ -4,6 +4,19 @@
 
 let __materialsCache = [];
 
+function initMaterials() {
+    loadMaterials();
+    
+    const btn = document.getElementById('btn-add-material');
+    if (btn) {
+        if (AppState.role === 'admin' || AppState.role === 'ministry') {
+            btn.style.display = 'inline-block';
+        } else {
+            btn.style.display = 'none';
+        }
+    }
+}
+
 async function loadMaterials() {
     try {
         const data = await apiGetMaterials();
