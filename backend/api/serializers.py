@@ -69,13 +69,13 @@ class AppointmentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Appointment
-        fields = ['id', 'patient_id', 'patient_name', 'patient_initials', 'date', 'time', 'diagnosis', 'status', 'conclusion', 'post_treatment_status', 'ai_diagnostics']
+        fields = ['id', 'patient_id', 'patient_name', 'patient_initials', 'date', 'time', 'diagnosis', 'status', 'conclusion', 'post_treatment_status', 'ai_diagnostics', 'anamnesis']
 
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['patient', 'date', 'time', 'diagnosis', 'status', 'conclusion', 'post_treatment_status', 'ai_diagnostics']
+        fields = ['patient', 'date', 'time', 'diagnosis', 'status', 'conclusion', 'post_treatment_status', 'ai_diagnostics', 'anamnesis']
 
 
 # ─── Prescription ──────────────────────────────────────────────────────────

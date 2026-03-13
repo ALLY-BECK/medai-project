@@ -127,6 +127,7 @@ class Appointment(models.Model):
     conclusion = models.TextField(blank=True)
     post_treatment_status = models.TextField(blank=True, help_text="Состояние после лечения")
     ai_diagnostics = models.TextField(blank=True, help_text="JSON строка или текст ИИ-заключения")
+    anamnesis = models.TextField(blank=True, help_text="Предварительный анамнез от пациента (жалобы)")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

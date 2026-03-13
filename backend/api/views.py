@@ -454,6 +454,7 @@ def appointment_book_view(request):
     doctor_id = request.data.get('doctor_id')
     date = request.data.get('date')
     time = request.data.get('time')
+    anamnesis = request.data.get('anamnesis', '')
 
     if not all([doctor_id, date, time]):
         return Response({'error': 'Обязательные поля: doctor_id, date, time'}, status=400)
@@ -468,6 +469,7 @@ def appointment_book_view(request):
         patient=patient,
         date=date,
         time=time,
+        anamnesis=anamnesis,
         status='waiting'
     )
     return Response(AppointmentSerializer(app).data, status=status.HTTP_201_CREATED)
