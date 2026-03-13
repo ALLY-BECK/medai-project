@@ -305,6 +305,10 @@
           <div>
             <h1 class="page-title">Приём пациента</h1>
             <p class="page-subtitle" id="appt-patient-name">Выберите пациента</p>
+            <div id="appt-patient-anamnesis" style="display:none; margin-top: 10px; background: rgba(255,255,255,0.05); padding: 10px 15px; border-radius: 8px; border-left: 3px solid var(--accent); max-width: 600px;">
+                <strong style="color: var(--text-secondary); font-size: 12px; text-transform: uppercase;">Предварительный анамнез:</strong>
+                <p id="appt-patient-anamnesis-text" style="margin-top: 5px; font-size: 14px; white-space: pre-wrap; color: var(--text-primary);"></p>
+            </div>
           </div>
           <div class="appt-status-badge" id="appt-status-badge">
             <span class="status-dot"></span>
@@ -859,6 +863,45 @@
         <button class="btn btn-ghost"
           onclick="document.getElementById('verify-email-modal').style.display='none'">Отмена</button>
         <button class="btn btn-primary" id="verify-btn" onclick="handleVerifyEmail()">Подтвердить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW MATERIAL MODAL -->
+  <div class="modal-overlay" id="material-view-modal" style="display:none; z-index: 9000;" onclick="closeMaterialModal()">
+    <div class="modal glass-card" style="max-width: 800px; max-height: 90vh; overflow-y: auto;" onclick="event.stopPropagation()">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+        <h2 class="modal-title" id="material-view-title" style="margin: 0; font-size: 1.5rem; line-height: 1.4;"></h2>
+        <button class="btn btn-ghost" style="padding: 5px 10px; margin-left: 20px;" onclick="closeMaterialModal()">✕</button>
+      </div>
+      <div style="color: rgba(255,255,255,0.6); margin-bottom: 20px; font-size: 0.9rem;" id="material-view-meta"></div>
+      <div id="material-view-content" style="font-size: 1.1rem; line-height: 1.6; white-space: pre-wrap; color: rgba(255,255,255,0.9);">
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE MATERIAL MODAL -->
+  <div class="modal-overlay" id="material-create-modal" style="display:none; z-index: 9000;" onclick="closeCreateMaterialModal()">
+    <div class="modal glass-card" style="max-width: 600px;" onclick="event.stopPropagation()">
+      <h2 class="modal-title">Опубликовать материал</h2>
+      <div class="form-group">
+        <label class="form-label">Тип материала</label>
+        <select class="form-input" id="material-create-type">
+          <option value="article">Статья</option>
+          <option value="lecture">Лекция</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заголовок</label>
+        <input type="text" class="form-input" id="material-create-title" placeholder="Введите заголовок...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Содержание</label>
+        <textarea class="form-input" id="material-create-content" rows="10" placeholder="Текст статьи или лекции..."></textarea>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeCreateMaterialModal()">Отмена</button>
+        <button class="btn btn-primary" id="material-create-btn" onclick="submitCreateMaterial()">Опубликовать</button>
       </div>
     </div>
   </div>

@@ -114,6 +114,23 @@ async function apiLogin(email, password, options = {}) {
     return await res.json();
 }
 
+// ─── Materials API ─────────────────────────────────────────────────────────
+
+async function apiGetMaterials() {
+    const res = await apiFetch('/materials/');
+    return res ? await res.json() : [];
+}
+
+async function apiCreateMaterial(title, content, type) {
+    const res = await apiFetch('/materials/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content, type }),
+    });
+    if (!res) throw new Error('Ошибка создания материала');
+    return await res.json();
+}
+
 // ─── Restore session on page load ─────────────────────────────────────────
 
 async function restoreSession() {

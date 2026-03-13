@@ -53,6 +53,23 @@ function initAppointment() {
     if (AppState.selectedPatient) {
         document.getElementById('appt-patient-name').textContent = AppState.selectedPatient.name;
     }
+
+    const anamnesisBox = document.getElementById('appt-patient-anamnesis');
+    const anamnesisText = document.getElementById('appt-patient-anamnesis-text');
+    
+    // Find appointment to show anamnesis
+    let currentAppt = null;
+    if (window.APPOINTMENTS_DATA && AppState.currentAppointmentId) {
+        currentAppt = window.APPOINTMENTS_DATA.find(a => a.id === AppState.currentAppointmentId);
+    }
+    
+    if (currentAppt && currentAppt.anamnesis) {
+        anamnesisText.textContent = currentAppt.anamnesis;
+        anamnesisBox.style.display = 'block';
+    } else {
+        anamnesisText.textContent = '';
+        anamnesisBox.style.display = 'none';
+    }
 }
 
 function startAppointment() {

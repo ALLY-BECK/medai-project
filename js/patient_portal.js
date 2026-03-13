@@ -164,6 +164,10 @@ async function initHospitals() {
                 <option value="15:30">15:30 - 16:00</option>
               </select>
             </div>
+            <div class="form-group">
+              <label class="form-label">Предварительный анамнез (жалобы, история болезни)</label>
+              <textarea class="form-input" id="booking-anamnesis" rows="3" placeholder="Опишите, что вас беспокоит..."></textarea>
+            </div>
             <div class="modal-actions">
               <button class="btn btn-ghost" onclick="document.getElementById('booking-modal').style.display='none'">Отмена</button>
               <button class="btn btn-primary" onclick="submitBooking()">Подтвердить</button>
@@ -183,6 +187,10 @@ function openBookingModal(docId, docName) {
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('booking-date').min = today;
   document.getElementById('booking-date').value = today;
+  
+  const anamnesisEl = document.getElementById('booking-anamnesis');
+  if (anamnesisEl) anamnesisEl.value = '';
+
   document.getElementById('booking-modal').style.display = 'flex';
 }
 
@@ -190,11 +198,12 @@ async function submitBooking() {
   const doctor_id = document.getElementById('booking-doc-id').value;
   const date = document.getElementById('booking-date').value;
   const time = document.getElementById('booking-time').value;
+  const anamnesis = document.getElementById('booking-anamnesis') ? document.getElementById('booking-anamnesis').value.trim() : '';
 
   try {
     const data = await apiFetch('/appointments/book/', {
       method: 'POST',
-      body: JSON.stringify({ doctor_id, date, time })
+      body: JSON.stringify({ doctor_id, date, time, anamnesis })
     });
 
     showToast('Успешная запись на прием!');
@@ -365,6 +374,13 @@ window.showHistoryDetail = function (appt) {
       <div style="font-size:12px; color:#aaa;">Официальный Диагноз</div>
       <div style="font-size:16px;">${appt.diagnosis || 'Не поставлен'}</div>
     </div>
+    
+    ${appt.anamnesis ? `
+    <div style="margin-bottom:15px;">
+      <div style="font-size:12px; color:#aaa;">Ваши первоначальные жалобы (Анамнез)</div>
+      <div style="font-size:14px; white-space: pre-wrap; background:rgba(255,255,255,0.05); padding:10px; border-radius:4px; margin-top:4px; border-left: 2px solid var(--accent);">${appt.anamnesis}</div>
+    </div>
+    ` : ''}
     
     <div style="margin-bottom:15px;">
       <div style="font-size:12px; color:#aaa;">Заключение врача</div>
