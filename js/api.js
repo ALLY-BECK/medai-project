@@ -118,7 +118,7 @@ async function apiLogin(email, password, options = {}) {
 
 async function apiGetMaterials() {
     const res = await apiFetch('/materials/');
-    return res ? await res.json() : [];
+    return res || [];
 }
 
 async function apiCreateMaterial(title, content, type) {
@@ -128,7 +128,7 @@ async function apiCreateMaterial(title, content, type) {
         body: JSON.stringify({ title, content, type }),
     });
     if (!res) throw new Error('Ошибка создания материала');
-    return await res.json();
+    return res;
 }
 
 // ─── Restore session on page load ─────────────────────────────────────────

@@ -5,8 +5,14 @@
 // ─── 1. Dashboard ─────────────────────────────────────────────────────────
 async function initPatientDashboard() {
   const d = new Date();
-  document.getElementById('patient-date').textContent = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`;
-  document.getElementById('patient-greeting').textContent = `Добрый день, ${AppState.user.name.split(' ')[0]}!`;
+  const dateEl = document.getElementById('patient-date');
+  if (dateEl) {
+      dateEl.textContent = `${d.getDate().toString().padStart(2, '0')}.${(d.getMonth() + 1).toString().padStart(2, '0')}.${d.getFullYear()}`;
+  }
+  const greetingEl = document.getElementById('patient-greeting');
+  if (greetingEl) {
+      greetingEl.textContent = `Добрый день, ${AppState.user.name.split(' ')[0]}!`;
+  }
 
   const container = document.getElementById('patient-dashboard-content');
   container.innerHTML = '<div style="text-align:center; padding: 20px; color:var(--text-muted)">Загрузка данных...</div>';
