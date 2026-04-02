@@ -97,11 +97,68 @@ async function initPatientDashboard() {
               </div>
           </div>
       </div>
+
+      <!-- Medical Documents for Patient -->
+      <div class="glass-card" style="grid-column: 1 / -1;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+            <h2 class="card-title">Ваши медицинские документы</h2>
+            <button class="btn btn-ghost btn-sm" onclick="openPatientUpload()">+ Загрузить новый</button>
+        </div>
+        <div id="patient-documents-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
+            <div style="text-align:center; padding:20px; opacity:0.6; grid-column: 1/-1;">⏳ Загрузка документов...</div>
+        </div>
+      </div>
     `;
+    
+    // Load documents for the current patient
+    if (data.profile && data.profile.id) {
+        loadPortalDocuments(data.profile.id);
+    }
+
   } catch (e) {
     container.innerHTML = '<p style="color:var(--red); text-align:center;">Ошибка соединения с сервером</p>';
     showToast(e.message, 'error');
   }
+}
+
+async function loadPortalDocuments(patientId) {
+    const list = document.getElementById('patient-documents-container');
+    if (!list) return;
+
+    try {
+        const docs = await apiFetch(`/patient-documents/?patient_id=${patientId}`);
+        if (!docs || docs.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding:20px; opacity:0.6; grid-column: 1/-1;">У вас пока нет загруженных документов.</div>';
+            return;
+        }
+        list.innerHTML = docs.map(doc => `
+            <div class="glass-card" style="padding: 15px; background: rgba(255,255,255,0.03);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                    <span class="badge badge-blue">${doc.doc_type_display}</span>
+                    <a href="${doc.file}" target="_blank" class="btn btn-ghost btn-sm">Открыть</a>
+                </div>
+                <div style="font-weight: 600; margin-bottom: 5px;">${doc.title}</div>
+                <div style="font-size: 12px; opacity: 0.7;">
+                    ${doc.doc_date || 'Без даты'}
+                </div>
+                <div style="font-size: 12px; opacity: 0.6; margin-top: 5px; font-style: italic;">
+                    ${doc.description || ''}
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        list.innerHTML = `<div style="grid-column: 1/-1; color:red; font-size:12px;">Ошибка загрузки: ${e.message}</div>`;
+    }
+}
+
+function openPatientUpload() {
+    // Ensure AppState.selectedPatient is set for the shared upload modal
+    if (AppState.patientData && AppState.patientData.profile) {
+        AppState.selectedPatient = AppState.patientData.profile;
+        openUploadModal();
+    } else {
+        showToast('Ошибка: профиль пациента не загружен', 'error');
+    }
 }
 
 // ─── 2. Hospitals & Doctors ───────────────────────────────────────────────

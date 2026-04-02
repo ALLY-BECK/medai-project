@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from .models import (
     User, Patient, ChronicDisease, Allergy, IllnessHistory,
-    Appointment, Prescription, PrescriptionMed, LabResult, Announcement, Material
+    Appointment, Prescription, PrescriptionMed, LabResult, Announcement, Material,
+    PatientDocument
 )
 
 
@@ -66,16 +67,17 @@ class AppointmentSerializer(serializers.ModelSerializer):
     patient_name     = serializers.CharField(source='patient.name', read_only=True)
     patient_initials = serializers.CharField(source='patient.initials', read_only=True)
     patient_id       = serializers.IntegerField(source='patient.id', read_only=True)
+    visit_type_display = serializers.CharField(source='get_visit_type_display', read_only=True)
 
     class Meta:
         model = Appointment
-        fields = ['id', 'patient_id', 'patient_name', 'patient_initials', 'date', 'time', 'diagnosis', 'status', 'conclusion', 'post_treatment_status', 'ai_diagnostics', 'anamnesis']
+        fields = ['id', 'patient_id', 'patient_name', 'patient_initials', 'date', 'time', 'diagnosis', 'status', 'visit_type', 'visit_type_display', 'conclusion', 'post_treatment_status', 'ai_diagnostics', 'anamnesis']
 
 
 class AppointmentCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['patient', 'date', 'time', 'diagnosis', 'status', 'conclusion', 'post_treatment_status', 'ai_diagnostics', 'anamnesis']
+        fields = ['patient', 'date', 'time', 'diagnosis', 'status', 'visit_type', 'conclusion', 'post_treatment_status', 'ai_diagnostics', 'anamnesis']
 
 
 # ─── Prescription ──────────────────────────────────────────────────────────
@@ -149,4 +151,25 @@ class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Material
         fields = ['id', 'author_name', 'title', 'content', 'type', 'type_display', 'created_at']
+
+
+# ─── Patient Document ─────────────────────────────────────────────────────
+
+class PatientDocumentSerializer(serializers.ModelSerializer):
+    uploaded_by_name = serializers.CharField(source='uploaded_by.name', read_only=True)
+    patient_name     = serializers.CharField(source='patient.name', read_only=True)
+    doc_type_display = serializers.CharField(source='get_doc_type_display', read_only=True)
+    file_url         = serializers.SerializerMethodField()
+
+    class Meta:
+        model = PatientDocument
+        fields = ['id', 'patient', 'patient_name', 'uploaded_by_name', 'doc_type', 'doc_type_display',
+                  'title', 'description', 'file', 'file_url', 'doc_date', 'created_at']
+
+    def get_file_url(self, obj):
+        request = self.context.get('request')
+        if obj.file and request:
+            return request.build_absolute_uri(obj.file.url)
+        return obj.file.url if obj.file else None
+
 

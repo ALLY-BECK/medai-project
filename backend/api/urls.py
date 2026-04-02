@@ -39,5 +39,10 @@ urlpatterns = [
     path('doctors/',             views.doctor_list_view,         name='doctor-list'),
     path('appointments/book/',   views.appointment_book_view,    name='appointment-book'),
     path('diagnostics/analyze/', views.diagnostics_analyze_view, name='diagnostics-analyze'),
+    path('consultation/analyze/', views.consultation_analyze_view, name='consultation-analyze'),
     path('patient/me/',          views.patient_me_view,          name='patient-me'),
+
+    # Patient Documents
+    path('patient-documents/',           views.patient_documents_view,       name='patient-documents'),
+    path('patient-documents/<int:pk>/',  views.patient_document_delete_view, name='patient-document-delete'),
 ]

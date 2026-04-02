@@ -118,12 +118,21 @@ class Appointment(models.Model):
         ('current', 'Идёт приём'),
         ('done',    'Завершён'),
     ]
+    VISIT_TYPE_CHOICES = [
+        ('primary',      'Первичный'),
+        ('secondary',    'Вторичный'),
+        ('follow_up',    'Повторный'),
+        ('preventive',   'Профилактический'),
+        ('emergency',    'Экстренный'),
+        ('consultation', 'Консультация'),
+    ]
     doctor    = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='appointments')
     patient   = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='appointments')
     date      = models.DateField()
     time      = models.TimeField()
     diagnosis = models.TextField(blank=True)
     status    = models.CharField(max_length=10, choices=STATUS_CHOICES, default='waiting')
+    visit_type = models.CharField(max_length=20, choices=VISIT_TYPE_CHOICES, default='primary')
     conclusion = models.TextField(blank=True)
     post_treatment_status = models.TextField(blank=True, help_text="Состояние после лечения")
     ai_diagnostics = models.TextField(blank=True, help_text="JSON строка или текст ИИ-заключения")
@@ -218,4 +227,36 @@ class Material(models.Model):
 
     def __str__(self):
         return f'{self.get_type_display()}: {self.title}'
+
+
+# ─── Patient Document ─────────────────────────────────────────────────────
+
+class PatientDocument(models.Model):
+    DOC_TYPE_CHOICES = [
+        ('analysis',    'Анализ'),
+        ('xray',        'Рентген / Снимок'),
+        ('ultrasound',  'УЗИ'),
+        ('mri',         'МРТ / КТ'),
+        ('ekg',         'ЭКГ'),
+        ('prescription','Рецепт'),
+        ('conclusion',  'Заключение врача'),
+        ('referral',    'Направление'),
+        ('certificate', 'Справка'),
+        ('other',       'Другое'),
+    ]
+    patient     = models.ForeignKey(Patient, on_delete=models.CASCADE, related_name='documents')
+    uploaded_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='uploaded_documents')
+    doc_type    = models.CharField(max_length=20, choices=DOC_TYPE_CHOICES, default='analysis')
+    title       = models.CharField(max_length=255, help_text="Название документа")
+    description = models.TextField(blank=True, help_text="Описание: дата, причина, комментарии")
+    file        = models.FileField(upload_to='patient_docs/%Y/%m/')
+    doc_date    = models.DateField(null=True, blank=True, help_text="Дата документа (анализа и т.д.)")
+    created_at  = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f'{self.get_doc_type_display()}: {self.title} — {self.patient.name}'
+
 

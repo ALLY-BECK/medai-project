@@ -11,6 +11,10 @@ SECRET_KEY = config('SECRET_KEY', default='medai-dev-secret-key-2026')
 DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
 
+# ─── External API Keys ─────────────────────────────────────────────────────
+# EndlessMedical API — бесплатный публичный API, ключи не требуются
+ENDLESSMEDICAL_API_URL = config('ENDLESSMEDICAL_API_URL', default='https://endlessmedical.com/api/v1')
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -92,6 +96,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# ─── Media (uploaded files) ────────────────────────────────────────────────
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # For development: print emails to the console instead of sending them
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

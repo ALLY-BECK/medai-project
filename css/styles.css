@@ -326,3 +326,95 @@ textarea.form-input{resize:vertical;min-height:80px}
 @media(max-width:1100px){.dashboard-grid{grid-template-columns:1fr}.ministry-grid{grid-template-columns:1fr}.appt-split{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){:root{--sidebar-width:0px}.sidebar{display:none}.main-content{margin-left:0;padding:16px}.role-grid{grid-template-columns:repeat(3,1fr)}.pharmacy-grid{grid-template-columns:1fr}.lab-grid{grid-template-columns:1fr}.admin-grid{grid-template-columns:1fr}}
 @media(max-width:480px){.role-grid{grid-template-columns:repeat(2,1fr)}.stats-row{grid-template-columns:1fr}}
+
+/* ═══════════════════════════════════════════════
+   AI Consultation — New Styles
+═══════════════════════════════════════════════ */
+
+/* Left Panel */
+.appt-left-panel{display:flex;flex-direction:column;gap:16px}
+.appt-dialog-card{height:auto;max-height:50vh;display:flex;flex-direction:column}
+
+/* Speaker Toggle */
+.speaker-toggle{display:flex;gap:4px;padding:3px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-sm)}
+.speaker-btn{padding:6px 14px;border-radius:calc(var(--radius-sm) - 2px);font-size:12px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-secondary);transition:var(--transition);font-family:'Inter',sans-serif;white-space:nowrap}
+.speaker-btn.active{background:linear-gradient(135deg,var(--blue),#1D4ED8);color:white;box-shadow:0 2px 8px rgba(37,99,235,0.35)}
+.speaker-btn:hover:not(.active){background:rgba(255,255,255,0.06);color:var(--text-primary)}
+
+/* Speech Controls */
+.speech-controls{display:flex;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid var(--glass-border)}
+.btn-mic{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:var(--transition);font-family:'Inter',sans-serif}
+.btn-mic.recording{background:linear-gradient(135deg,rgba(239,68,68,0.2),rgba(239,68,68,0.1));color:#FCA5A5;border:1px solid rgba(239,68,68,0.3)}
+.btn-mic.recording:hover{background:linear-gradient(135deg,rgba(239,68,68,0.3),rgba(239,68,68,0.2))}
+.btn-mic.paused{background:linear-gradient(135deg,rgba(16,185,129,0.2),rgba(16,185,129,0.1));color:#34D399;border:1px solid rgba(16,185,129,0.3)}
+.btn-mic.paused:hover{background:linear-gradient(135deg,rgba(16,185,129,0.3),rgba(16,185,129,0.2))}
+.btn-stop{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);color:var(--text-secondary);transition:var(--transition);font-family:'Inter',sans-serif}
+.btn-stop:hover{background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#FCA5A5}
+
+/* Speech Warning */
+.speech-warning{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:var(--radius-sm);margin-top:12px;font-size:12px;color:#FCD34D;line-height:1.5}
+.speech-warning svg{flex-shrink:0;margin-top:1px}
+
+/* Manual Transcript */
+.manual-transcript{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.manual-transcript .form-input{min-height:60px}
+.manual-transcript .btn{align-self:flex-end}
+
+/* Dialog Time */
+.dialog-time{font-size:10px;color:var(--text-muted);font-weight:400;margin-left:6px}
+
+/* Interim (ghost) bubble */
+.dialog-message.interim{opacity:0.5}
+.interim-bubble{border-style:dashed !important;font-style:italic}
+
+/* Doctor Notes Card */
+.doctor-notes-card{padding:20px}
+.doctor-notes-textarea{width:100%;min-height:100px;max-height:200px;resize:vertical;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-sm);padding:12px 14px;color:var(--text-primary);font-size:14px;font-family:'Inter',sans-serif;transition:var(--transition);outline:none;line-height:1.6;margin-top:12px}
+.doctor-notes-textarea:focus{border-color:var(--blue);background:rgba(37,99,235,0.06);box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+.doctor-notes-textarea::placeholder{color:var(--text-muted);font-size:13px}
+
+/* AI Analyze Button */
+.btn-ai-analyze{display:flex;align-items:center;gap:16px;width:100%;padding:18px 24px;border-radius:var(--radius-lg);font-family:'Inter',sans-serif;cursor:pointer;border:1px solid rgba(139,92,246,0.3);background:linear-gradient(135deg,rgba(139,92,246,0.12) 0%,rgba(37,99,235,0.12) 100%);transition:var(--transition);position:relative;overflow:hidden}
+.btn-ai-analyze::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(37,99,235,0.15));opacity:0;transition:opacity 0.3s}
+.btn-ai-analyze:hover::before{opacity:1}
+.btn-ai-analyze:hover{border-color:rgba(139,92,246,0.5);transform:translateY(-2px);box-shadow:0 8px 32px rgba(139,92,246,0.2)}
+.btn-ai-analyze:active{transform:translateY(0)}
+.btn-ai-analyze:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.ai-analyze-icon{width:48px;height:48px;border-radius:var(--radius-md);background:linear-gradient(135deg,rgba(139,92,246,0.25),rgba(37,99,235,0.25));display:flex;align-items:center;justify-content:center;color:#C4B5FD;flex-shrink:0;position:relative;z-index:1}
+.ai-analyze-text{display:flex;flex-direction:column;gap:3px;text-align:left;position:relative;z-index:1}
+.ai-analyze-title{font-size:15px;font-weight:700;color:var(--text-primary)}
+.ai-analyze-sub{font-size:12px;color:var(--text-secondary)}
+
+/* Spinning animation for loading */
+.spinning{animation:spin 1s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* AI Loading Spinner */
+.ai-loading{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);font-style:italic;padding:8px 0}
+.ai-loading-spinner{width:16px;height:16px;border:2px solid rgba(139,92,246,0.2);border-top-color:#C4B5FD;border-radius:50%;animation:spin 0.8s linear infinite;flex-shrink:0}
+
+/* AI Placeholder */
+.ai-placeholder{font-size:13px;color:var(--text-muted);padding:12px 0;line-height:1.5}
+.ai-placeholder.error{color:rgba(239,68,68,0.7)}
+
+/* Diagnosis Bar */
+.diagnosis-item{padding:12px 14px;background:rgba(37,99,235,0.08);border:1px solid rgba(37,99,235,0.15);border-radius:var(--radius-sm);margin-bottom:8px;animation:fadeInUp 0.3s ease}
+.diagnosis-name{font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:8px}
+.diagnosis-bar-wrap{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;margin-bottom:4px}
+.diagnosis-bar{height:100%;border-radius:3px;transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+.diagnosis-confidence{font-size:11px;font-weight:600;color:var(--blue-light);text-align:right}
+
+/* Recommendation Item */
+.recommendation-item{padding:8px 12px;font-size:13px;color:var(--text-secondary);border-bottom:1px solid rgba(255,255,255,0.04);line-height:1.5;animation:fadeInUp 0.3s ease}
+.recommendation-item:last-child{border-bottom:none}
+.recommendation-item:hover{color:var(--text-primary);background:rgba(255,255,255,0.02)}
+
+/* Responsive for appointment */
+@media(max-width:1100px){
+  .appt-split{grid-template-columns:1fr}
+  .appt-dialog-card{max-height:40vh}
+  .dialog-header{flex-wrap:wrap;gap:10px}
+  .speaker-toggle{order:3;width:100%}
+  .speaker-btn{flex:1;text-align:center}
+}
+

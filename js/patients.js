@@ -139,10 +139,109 @@ async function openRecord(id) {
         🩺 Начать приём
       </button>
     </div>
+
+    <!-- Medical Documents Section -->
+    <div class="record-section" style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <div class="record-section-title" style="margin-bottom: 0;">Медицинские документы</div>
+        <button class="btn btn-ghost btn-sm" onclick="openUploadModal()">+ Добавить</button>
+      </div>
+      <div id="record-documents-list">
+        <div style="text-align:center; padding:20px; opacity:0.6;">⏳ Загрузка документов...</div>
+      </div>
+    </div>
   `;
+    // Load documents after rendering the basic UI
+    loadPatientDocuments(id);
   } catch (err) {
     content.innerHTML = `<div style="color:var(--red);padding:20px">❌ ${err.message}</div>`;
   }
+}
+
+async function loadPatientDocuments(patientId) {
+    const list = document.getElementById('record-documents-list');
+    try {
+        const docs = await apiFetch(`/patient-documents/?patient_id=${patientId}`);
+        if (!docs || docs.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding:20px; opacity:0.6;">Документов пока нет.</div>';
+            return;
+        }
+        list.innerHTML = docs.map(doc => `
+            <div class="glass-card" style="margin-bottom: 10px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <span class="badge badge-blue" style="font-size: 10px; padding: 2px 6px;">${doc.doc_type_display}</span>
+                        <div style="font-weight: 500; margin-top: 5px;">${doc.title}</div>
+                        <div style="font-size: 12px; opacity: 0.7; margin-top: 2px;">
+                            ${doc.doc_date || 'Без даты'} · ${doc.description || 'Нет описания'}
+                        </div>
+                    </div>
+                    <a href="${doc.file}" target="_blank" class="btn btn-ghost btn-sm" style="padding: 4px 8px;">Открыть</a>
+                </div>
+            </div>
+        `).join('');
+    } catch (e) {
+        list.innerHTML = `<div style="color:red; font-size:12px;">Ошибка загрузки документов: ${e.message}</div>`;
+    }
+}
+
+// ─── Modal Implementation ──────────────────────────────────────────────────
+
+function openUploadModal() {
+    document.getElementById('upload-doc-modal').style.display = 'flex';
+}
+
+function closeUploadModal() {
+    document.getElementById('upload-doc-modal').style.display = 'none';
+}
+
+async function submitDocumentUpload() {
+    const btn = document.getElementById('btn-submit-doc');
+    const title = document.getElementById('doc-upload-title').value.trim();
+    const type = document.getElementById('doc-upload-type').value;
+    const date = document.getElementById('doc-upload-date').value;
+    const desc = document.getElementById('doc-upload-desc').value.trim();
+    const fileInput = document.getElementById('doc-upload-file');
+
+    if (!title || !fileInput.files[0]) {
+        showToast('Введите название и выберите файл', 'error');
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('patient', AppState.selectedPatient.id);
+    formData.append('title', title);
+    formData.append('doc_type', type);
+    formData.append('doc_date', date);
+    formData.append('description', desc);
+    formData.append('file', fileInput.files[0]);
+
+    btn.disabled = true;
+    btn.innerHTML = 'Загрузка...';
+
+    try {
+        await apiUploadDocument(formData);
+        showToast('✅ Файл успешно загружен');
+        closeUploadModal();
+        
+        // Clear fields
+        document.getElementById('doc-upload-title').value = '';
+        document.getElementById('doc-upload-desc').value = '';
+        fileInput.value = '';
+        
+        // Reload documents in the correct context
+        if (document.getElementById('record-documents-list')) {
+            loadPatientDocuments(AppState.selectedPatient.id);
+        }
+        if (document.getElementById('patient-documents-container')) {
+            loadPortalDocuments(AppState.selectedPatient.id);
+        }
+    } catch (e) {
+        showToast('Ошибка загрузки: ' + e.message, 'error');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = 'Загрузить';
+    }
 }
 
 function closeRecord(e) {

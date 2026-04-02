@@ -3,7 +3,9 @@
 // Handles JWT tokens, fetch requests to backend
 // ═══════════════════════════════════════════════
 
-const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+const _host = window.location.hostname;
+const _proto = window.location.protocol;
+const API_BASE = (_host === 'localhost' || _host === '127.0.0.1' || _host === '' || _proto === 'file:')
     ? 'http://127.0.0.1:8000/api'
     : 'https://medai-project.onrender.com/api';
 
@@ -129,6 +131,26 @@ async function apiCreateMaterial(title, content, type) {
     });
     if (!res) throw new Error('Ошибка создания материала');
     return res;
+}
+
+// ─── Patient Documents API ─────────────────────────────────────────────────
+
+async function apiUploadDocument(formData) {
+    const token = getAccessToken();
+    const res = await fetch(`${API_BASE}/patient-documents/`, {
+        method: 'POST',
+        headers: {
+            // No Content-Type header here - fetch handles it automatically for FormData
+            'Authorization': `Bearer ${token}`
+        },
+        body: formData,
+    });
+
+    if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Ошибка загрузки файла');
+    }
+    return await res.json();
 }
 
 // ─── Restore session on page load ─────────────────────────────────────────

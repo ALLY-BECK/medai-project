@@ -320,32 +320,121 @@
           <div class="glass-card appt-start-card">
             <div class="appt-start-icon">🩺</div>
             <h2>Начать приём</h2>
-            <p>Нажмите кнопку, чтобы начать запись диалога с пациентом. ИИ будет анализировать разговор в реальном
-              времени.</p>
-            <button class="btn btn-primary btn-lg" onclick="startAppointment()">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <circle cx="12" cy="12" r="10" />
-                <path d="M10 8l6 4-6 4V8z" fill="white" />
-              </svg>
-              Начать приём
-            </button>
+            <p>Выберите тип посещения и нажмите кнопку для начала записи.</p>
+            
+            <div class="form-group" style="width: 100%; max-width: 300px; margin: 20px auto;">
+              <label class="form-label" style="text-align: left;">Тип приёма</label>
+              <select class="form-input" id="appt-visit-type">
+                <option value="primary">Первичный приём</option>
+                <option value="secondary">Вторичный приём</option>
+                <option value="follow_up">Повторный приём</option>
+                <option value="preventive">Профилактический</option>
+                <option value="emergency">Экстренный</option>
+                <option value="consultation">Консультация</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; justify-content: center; width: 100%;">
+                <button class="btn btn-primary" onclick="startAppointment()">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M10 8l6 4-6 4V8z" fill="white" />
+                  </svg>
+                  Начать приём
+                </button>
+                <button class="btn btn-ghost" onclick="changePatient()">
+                  Сменить пациента
+                </button>
+            </div>
           </div>
         </div>
 
         <div class="appt-session" id="appt-session" style="display:none">
           <div class="appt-split">
-            <!-- Left: Dialog -->
-            <div class="glass-card appt-dialog-card">
-              <div class="dialog-header">
-                <div class="mic-indicator" id="mic-indicator">
-                  <span class="mic-dot"></span>
-                  <span>Запись идёт</span>
+            <!-- Left: Dialog + Doctor Notes -->
+            <div class="appt-left-panel">
+              <div class="glass-card appt-dialog-card">
+                <div class="dialog-header">
+                  <div class="mic-indicator" id="mic-indicator">
+                    <span class="mic-dot"></span>
+                    <span>Запись идёт</span>
+                  </div>
+                  <div class="speaker-toggle" id="speaker-toggle">
+                    <button class="speaker-btn active" id="speaker-btn-doctor" onclick="setSpeaker('doctor')">
+                      👨‍⚕️ Врач
+                    </button>
+                    <button class="speaker-btn" id="speaker-btn-patient" onclick="setSpeaker('patient')">
+                      🧑 Пациент
+                    </button>
+                  </div>
+                  <span class="dialog-timer" id="dialog-timer">00:00</span>
                 </div>
-                <span class="dialog-timer" id="dialog-timer">00:00</span>
+                <div class="dialog-transcript" id="dialog-transcript">
+                  <!-- Populated by Web Speech API -->
+                </div>
+
+                <!-- Speech controls -->
+                <div class="speech-controls" id="speech-controls">
+                  <button class="btn btn-mic recording" id="btn-mic-toggle" onclick="toggleMic()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                      <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                    </svg>
+                    <span id="mic-btn-text">Пауза</span>
+                  </button>
+                  <button class="btn btn-stop" id="btn-stop-recording" onclick="stopRecordingManual()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                      <rect x="6" y="6" width="12" height="12" rx="2"/>
+                    </svg>
+                    Завершить запись
+                  </button>
+                </div>
+
+                <!-- Speech not supported warning -->
+                <div class="speech-warning" id="speech-warning" style="display:none">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                  <span>Голосовая запись не поддерживается в вашем браузере. Используйте Chrome или Edge. Вы можете вводить текст диалога вручную.</span>
+                </div>
+
+                <!-- Manual transcript input (fallback) -->
+                <div class="manual-transcript" id="manual-transcript" style="display:none">
+                  <textarea class="form-input" id="manual-transcript-input" rows="3"
+                    placeholder="Введите реплику вручную..."></textarea>
+                  <button class="btn btn-primary btn-sm" onclick="addManualMessage()">Добавить реплику</button>
+                </div>
               </div>
-              <div class="dialog-transcript" id="dialog-transcript">
-                <!-- Populated by JS -->
+
+              <!-- Doctor Notes -->
+              <div class="glass-card doctor-notes-card">
+                <div class="card-header">
+                  <h3 class="card-title">📝 Заметки врача</h3>
+                  <span class="badge badge-blue" id="notes-char-count">0 символов</span>
+                </div>
+                <textarea class="doctor-notes-textarea" id="doctor-notes"
+                  placeholder="Введите клинические наблюдения: осмотр, пальпация, аускультация, температура, давление, результаты тестов и т.д."
+                  oninput="updateNotesCount()"></textarea>
               </div>
+
+              <!-- Analyze button -->
+              <button class="btn btn-ai-analyze" id="btn-ai-analyze" onclick="runAIAnalysis()">
+                <div class="ai-analyze-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2a4 4 0 014 4c0 1.1-.9 2-2 2h-4a2 2 0 01-2-2 4 4 0 014-4z"/>
+                    <path d="M8 8v2a4 4 0 004 4h0a4 4 0 004-4V8"/>
+                    <path d="M12 14v4"/>
+                    <path d="M8 18h8"/>
+                    <circle cx="9" cy="6" r="0.5" fill="currentColor"/>
+                    <circle cx="15" cy="6" r="0.5" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div class="ai-analyze-text">
+                  <span class="ai-analyze-title">🤖 Запустить ИИ-анализ</span>
+                  <span class="ai-analyze-sub">Анализ транскрипта + заметок врача</span>
+                </div>
+              </button>
             </div>
 
             <!-- Right: AI Analysis -->
@@ -357,26 +446,27 @@
                     <span>ИИ Анализ</span>
                     <div class="ai-pulse"></div>
                   </div>
+                  <span class="badge badge-blue" id="ai-source-badge" style="display:none">MedAI</span>
                 </div>
 
                 <div class="ai-section">
                   <h3 class="ai-section-title">Симптомы</h3>
                   <div class="ai-symptoms" id="ai-symptoms">
-                    <div class="ai-loading">Анализирую...</div>
+                    <div class="ai-placeholder">Начните приём для анализа симптомов</div>
                   </div>
                 </div>
 
                 <div class="ai-section">
                   <h3 class="ai-section-title">Предварительный диагноз</h3>
                   <div class="ai-diagnosis" id="ai-diagnosis">
-                    <div class="ai-loading">Ожидаю данных...</div>
+                    <div class="ai-placeholder">Ожидаю данных для диагностики...</div>
                   </div>
                 </div>
 
                 <div class="ai-section">
                   <h3 class="ai-section-title">Рекомендации</h3>
                   <div class="ai-recommendations" id="ai-recommendations">
-                    <div class="ai-loading">Ожидаю данных...</div>
+                    <div class="ai-placeholder">Ожидаю данных для рекомендаций...</div>
                   </div>
                 </div>
               </div>
@@ -384,7 +474,7 @@
               <div class="glass-card conclusion-card">
                 <h3 class="card-title">Заключение врача</h3>
                 <textarea class="conclusion-textarea" id="conclusion-text"
-                  placeholder="Заключение будет предложено ИИ. Вы можете редактировать..."></textarea>
+                  placeholder="Заключение будет предложено ИИ после анализа. Вы можете редактировать..."></textarea>
 
                 <div id="extended-conclusion-fields"
                   style="display:none; margin-top:15px; border-top:1px solid rgba(255,255,255,0.1); padding-top:15px;">
@@ -906,18 +996,18 @@
     </div>
   </div>
 
-  <script src="js/api.js?v=2"></script>
-  <script src="js/app.js?v=2"></script>
-  <script src="js/auth.js?v=2"></script>
-  <script src="js/dashboard.js?v=2"></script>
-  <script src="js/patients.js?v=2"></script>
-  <script src="js/appointment.js?v=2"></script>
-  <script src="js/pharmacy.js?v=2"></script>
-  <script src="js/laboratory.js?v=2"></script>
-  <script src="js/ministry.js?v=2"></script>
-  <script src="js/admin.js?v=2"></script>
-  <script src="js/patient_portal.js?v=2"></script>
-  <script src="js/materials.js?v=2"></script>
+  <script src="js/api.js?v=3"></script>
+  <script src="js/app.js?v=3"></script>
+  <script src="js/auth.js?v=3"></script>
+  <script src="js/dashboard.js?v=3"></script>
+  <script src="js/patients.js?v=3"></script>
+  <script src="js/appointment.js?v=3"></script>
+  <script src="js/pharmacy.js?v=3"></script>
+  <script src="js/laboratory.js?v=3"></script>
+  <script src="js/ministry.js?v=3"></script>
+  <script src="js/admin.js?v=3"></script>
+  <script src="js/patient_portal.js?v=3"></script>
+  <script src="js/materials.js?v=3"></script>
 
 </body>
 
